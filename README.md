@@ -1,20 +1,12 @@
-![Version](https://img.shields.io/github/v/tag/michaldrabik/showly-2.0?label=version)
-![Build]( https://img.shields.io/github/actions/workflow/status/michaldrabik/showly-2.0/android.yml?branch=master)
-![Twitter](https://img.shields.io/twitter/follow/AppShowly?style=social)
+![Version](https://img.shields.io/github/v/tag/VSeryi/Watchly?label=version)
+![Build]( https://img.shields.io/github/actions/workflow/status/VSeryi/Watchly/android.yml?branch=main)
 
-# Showly
-<img src="https://i.ibb.co/ChBN7Lg/ic-launcher.png" align="left" width="180" hspace="10" vspace="10" />
+# Watchly
+<img src="https://i.ibb.co/k847xPY/ic-launcher.png" align="left" width="88" hspace="10" vspace="10" />
 
-Showly is a modern Android TV Shows Tracker.
+Watchly is an unofficial, experimental, unstable and personal fork of [Showly](https://play.google.com/store/apps/details?id=com.michaldrabik.showly2).
 
-The OSS version available in this repo is completely free of all Google services. 
-
-<a href="https://play.google.com/store/apps/details?id=com.michaldrabik.showly2">
-  <img
-    alt="Get it on Google Play"
-    height="80"
-    src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"/>
-</a>
+You can get the original and stable OSS version in [this repo](https://github.com/michaldrabik/showly-2.0/) completely free of all Google services. 
 
 ## Screenshots
 
@@ -24,6 +16,12 @@ The OSS version available in this repo is completely free of all Google services
    <img src="assets/screenshots/github3a.jpg" width="150" alt="Screenshot 3">
    <img src="assets/screenshots/github4a.jpg" width="150" alt="Screenshot 4">
 </div>
+
+## New features
+
+1. Translations based in your country
+2. Poster translations when available
+3. Some other minor changes
 
 ## Project Setup
 
@@ -46,34 +44,30 @@ omdbApiKey="your omdb api key"
 
 ## Issues & Contributions
 
-Feel free to post problems with the app as Github [Issues](https://github.com/michaldrabik/showly-2.0/issues).
+Feel free to post problems with the app as Github [Issues](https://github.com/VSeryi/Watchly/issues).
 
-Features ideas should be posted as new GIthub [Discussion](https://github.com/michaldrabik/showly-2.0/discussions).
+Features ideas should be posted as new GIthub [Discussion](https://github.com/VSeryi/Watchly/discussions).
 
 Pull requests are welcome. Remember about leaving a comment in the relevant issue if you are working on something.
 
 ### Language Translations
 
 We're always looking for help with translating app into more languages.<br>
-If you are interested in helping now or in the future, please visit our CrowdIn project and join:<br>
+If you are interested in helping now or in the future, please visit the original CrowdIn project and join:<br>
 https://crwd.in/showly-android-app
 
 ## FAQ
 
-**1. Can I watch/stream/download shows and movies with Showly app?**
+**1. Can I watch/stream/download shows and movies with Watchly app?**
 
-  No, that is not possible. Showly is a progress tracking type of app - not a streaming service.
+  No, that is not possible. Watchly is a progress tracking type of app - not a streaming service.
 
 **2. Show/Episode/Movie I'm looking for seems to be missing. What can I do?**
 
-  Showly uses [Trakt.tv](https://trakt.tv) as its main data source.
+  Watchly uses [Trakt.tv](https://trakt.tv) as its main data source.
   If something is missing please use "Import Show" / "Import Movie" option located at the bottom of Trakt.tv website.
   It's also possible to contact Trakt.tv support about any related issue.
 
-## Contact
+## Credits
 
-Twitter: https://twitter.com/AppShowly
-
-Landing Page: www.showlyapp.com
-
-Email: showlyapp@gmail.com
+  Thanks to [michaldrabik](https://github.com/michaldrabik) the original and main maintainer of [Showly 2.0](https://github.com/michaldrabik/showly-2.0)
