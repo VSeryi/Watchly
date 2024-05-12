@@ -75,30 +75,39 @@ class SettingsGeneralMainCase @Inject constructor(
       if (!locales.isEmpty) {
         val locale = locales.get(0)!!.language
         val language = AppLanguage.fromCode(locale)
-        if (settingsRepository.language != locale) {
+        if (settingsRepository.languageCode != locale) {
           setLanguage(language)
         }
         return language
       }
     }
-    return AppLanguage.fromCode(settingsRepository.language)
+    return AppLanguage.fromCode(settingsRepository.languageCode)
   }
 
   suspend fun setLanguage(language: AppLanguage) {
     settingsRepository.run {
-      this.language = language.code
-      val unused = AppLanguage.values()
-        .filter { it.code != Config.DEFAULT_LANGUAGE && it != language }
+      this.languageCode = language.code
+      val unused = AppLanguage.entries
+        .filter { it.code != Config.DEFAULT_LANGUAGE_CODE && it != language }
         .map { it.code }
-      clearUnusedTranslations(unused)
+      clearUnusedTranslationsByLanguage(unused)
       clearLanguageLogs()
     }
   }
 
-  fun getCountry() = AppCountry.fromCode(settingsRepository.country)
+  fun getCountry(): AppCountry {
+    return AppCountry.fromCode(settingsRepository.country)
+  }
 
-  fun setCountry(country: AppCountry) {
-    settingsRepository.country = country.code
+  suspend fun setCountry(country: AppCountry) {
+    settingsRepository.run {
+      this.country = country.code
+      val unused = AppCountry.entries
+        .filter { it.code != Config.DEFAULT_COUNTRY && it != country }
+        .map { it.code }
+      clearUnusedTranslationsByCountry(unused)
+      clearLanguageLogs()
+    }
   }
 
   fun getProgressType() = settingsRepository.progressNextEpisodeType

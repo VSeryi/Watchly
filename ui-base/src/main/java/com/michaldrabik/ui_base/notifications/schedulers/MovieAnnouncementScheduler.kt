@@ -43,7 +43,7 @@ class MovieAnnouncementScheduler @Inject constructor(
   suspend fun scheduleAnnouncement(
     context: Context,
     movie: Movie,
-    language: String,
+    language: Pair<String, String>
   ) {
     var translation: Translation? = null
     if (language != Config.DEFAULT_LANGUAGE) {

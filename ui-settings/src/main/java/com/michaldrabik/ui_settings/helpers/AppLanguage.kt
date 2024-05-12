@@ -24,6 +24,6 @@ enum class AppLanguage(
   CHINESE("zh", "Chinese Simplified", R.string.textLanguageChinese);
 
   companion object {
-    fun fromCode(code: String) = values().first { it.code == code }
+    fun fromCode(code: String) = values().first { it.code.equals(code, ignoreCase = true)}
   }
 }

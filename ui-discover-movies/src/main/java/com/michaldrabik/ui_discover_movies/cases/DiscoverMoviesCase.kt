@@ -76,7 +76,7 @@ internal class DiscoverMoviesCase @Inject constructor(
     watchlistMoviesIds: List<Long>,
     hiddenMoviesIds: List<Long>,
     filters: DiscoverFilters?,
-    language: String
+    language: Pair<String, String>
   ) = coroutineScope {
     val collectionIds = myMoviesIds + watchlistMoviesIds
     movies
@@ -104,7 +104,7 @@ internal class DiscoverMoviesCase @Inject constructor(
       .toList()
   }
 
-  private suspend fun loadTranslation(language: String, itemType: ImageType, movie: Movie) =
+  private suspend fun loadTranslation(language: Pair<String, String>, itemType: ImageType, movie: Movie) =
     if (language == Config.DEFAULT_LANGUAGE || itemType == POSTER) null
     else translationsRepository.loadTranslation(movie, language, true)
 

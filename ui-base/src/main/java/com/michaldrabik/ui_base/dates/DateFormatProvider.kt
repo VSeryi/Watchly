@@ -87,7 +87,7 @@ class DateFormatProvider @Inject constructor(
   }
 
   private fun createDateFormat(pattern: String): DateTimeFormatter {
-    val language = settingsRepository.language
+    val language = settingsRepository.languageCode
     if (language == "zh") {
       return DateTimeFormatter.ofPattern(pattern.appendChineseDay())
     }

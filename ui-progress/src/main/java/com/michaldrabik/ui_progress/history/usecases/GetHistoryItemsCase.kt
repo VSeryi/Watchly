@@ -123,7 +123,7 @@ internal class GetHistoryItemsCase @Inject constructor(
     val searchItems = filterByQuery(searchQuery, dateFormat, items)
     val groupedItems = grouper.groupByDay(
       items = searchItems,
-      language = language,
+      language = language.first,
     )
     filtersItem + groupedItems
   }
@@ -146,7 +146,7 @@ internal class GetHistoryItemsCase @Inject constructor(
   }
 
   private suspend fun getTranslation(
-    language: String,
+    language: Pair<String, String>,
     show: Show,
     episode: EpisodeUi
   ): TranslationsBundle? {

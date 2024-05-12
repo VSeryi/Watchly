@@ -77,7 +77,7 @@ class MainInitialsCase @Inject constructor(
   }
 
   fun setLanguage(appLanguage: AppLanguage) {
-    settingsRepository.language = appLanguage.code
+    settingsRepository.languageCode = appLanguage.code
     val locales = LocaleListCompat.forLanguageTags(appLanguage.code)
     AppCompatDelegate.setApplicationLocales(locales)
   }
@@ -98,7 +98,7 @@ class MainInitialsCase @Inject constructor(
       val languagesCodes = arrayOf(locales[0], locales[1])
         .filterNotNull()
         .map { it.language.lowercase() }
-      if (languagesCodes.any { it != Locale(Config.DEFAULT_LANGUAGE).language }) {
+      if (languagesCodes.any { it != Locale(Config.DEFAULT_LANGUAGE_CODE).language }) {
         val languageCodes = appLanguages.map { it.code }
         languagesCodes.forEach { language ->
           if (language in languageCodes) {
@@ -106,7 +106,7 @@ class MainInitialsCase @Inject constructor(
           }
         }
         appLanguages
-          .filter { it.code != Config.DEFAULT_LANGUAGE }
+          .filter { it.code != Config.DEFAULT_LANGUAGE_CODE }
           .forEach { appLanguage ->
             if (appLanguage.code in languagesCodes) {
               return appLanguage

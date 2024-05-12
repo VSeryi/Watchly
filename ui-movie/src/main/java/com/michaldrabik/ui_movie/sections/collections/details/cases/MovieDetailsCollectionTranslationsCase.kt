@@ -17,7 +17,7 @@ class MovieDetailsCollectionTranslationsCase @Inject constructor(
 
   suspend fun loadMissingTranslation(
     item: MovieDetailsCollectionItem.MovieItem,
-    language: String
+    language: Pair<String, String>
   ) = withContext(dispatchers.IO) {
     try {
       val translation = translationsRepository.loadTranslation(item.movie, language) ?: Translation.EMPTY

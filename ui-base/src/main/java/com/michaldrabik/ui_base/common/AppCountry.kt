@@ -55,6 +55,6 @@ enum class AppCountry(
   VENEZUELA("ve", "Venezuela", "buscar");
 
   companion object {
-    fun fromCode(code: String) = values().first { it.code == code }
+    fun fromCode(code: String) = entries.first { it.code.equals(code, ignoreCase = true)}
   }
 }

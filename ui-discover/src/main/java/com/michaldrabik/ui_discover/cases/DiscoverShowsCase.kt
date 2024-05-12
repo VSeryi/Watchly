@@ -135,7 +135,7 @@ internal class DiscoverShowsCase @Inject constructor(
     }
   }
 
-  private suspend fun loadTranslation(language: String, itemType: ImageType, show: Show) =
+  private suspend fun loadTranslation(language: Pair<String, String>, itemType: ImageType, show: Show) =
     if (language == Config.DEFAULT_LANGUAGE || itemType == ImageType.POSTER) null
     else translationsRepository.loadTranslation(show, language, true)
 

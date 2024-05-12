@@ -43,7 +43,7 @@ class SearchSuggestionsCaseTest : BaseMockTest() {
     super.setUp()
 
     coEvery { settingsRepository.isMoviesEnabled } returns true
-    coEvery { translationsRepository.getLanguage() } returns "en"
+    coEvery { translationsRepository.getLanguage() } returns Pair("en","us")
     coEvery { database.shows } returns showsDao
     coEvery { database.movies } returns moviesDao
 
@@ -102,7 +102,7 @@ class SearchSuggestionsCaseTest : BaseMockTest() {
   @Test
   fun `Should skip preload local movies translations cache if not default language but movies are disabled`() =
     runTest {
-      coEvery { translationsRepository.getLanguage() } returns "br"
+      coEvery { translationsRepository.getLanguage() } returns Pair("pt","br")
       coEvery { settingsRepository.isMoviesEnabled } returns false
 
       SUT.preloadCache()
@@ -118,12 +118,12 @@ class SearchSuggestionsCaseTest : BaseMockTest() {
 
   @Test
   fun `Should preload local translations cache`() = runTest {
-    coEvery { translationsRepository.getLanguage() } returns "br"
+    coEvery { translationsRepository.getLanguage() } returns Pair("pt","br")
 
     SUT.preloadCache()
 
-    coVerify(exactly = 1) { translationsRepository.loadAllShowsLocal("br") }
-    coVerify(exactly = 1) { translationsRepository.loadAllMoviesLocal("br") }
+    coVerify(exactly = 1) { translationsRepository.loadAllShowsLocal(Pair("pt","br")) }
+    coVerify(exactly = 1) { translationsRepository.loadAllMoviesLocal(Pair("pt","br"))}
   }
 
   @Test
@@ -137,7 +137,7 @@ class SearchSuggestionsCaseTest : BaseMockTest() {
 
   @Test
   fun `Should clear local caches properly`() = runTest {
-    coEvery { translationsRepository.getLanguage() } returns "br"
+    coEvery { translationsRepository.getLanguage() } returns Pair("pt","br")
 
     SUT.preloadCache()
     SUT.clearCache()
@@ -145,7 +145,7 @@ class SearchSuggestionsCaseTest : BaseMockTest() {
 
     coVerify(exactly = 2) { showsDao.getAll() }
     coVerify(exactly = 2) { moviesDao.getAll() }
-    coVerify(exactly = 2) { translationsRepository.loadAllShowsLocal("br") }
-    coVerify(exactly = 2) { translationsRepository.loadAllMoviesLocal("br") }
+    coVerify(exactly = 2) { translationsRepository.loadAllShowsLocal(Pair("pt","br")) }
+    coVerify(exactly = 2) { translationsRepository.loadAllMoviesLocal(Pair("pt","br")) }
   }
 }

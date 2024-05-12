@@ -32,7 +32,7 @@ class MovieDetailsCollectionMoviesCase @Inject constructor(
 
   suspend fun loadCollectionMovies(
     collectionId: IdTrakt,
-    language: String
+    language: Pair<String, String>
   ): List<MovieDetailsCollectionItem.MovieItem> = withContext(dispatchers.IO) {
     val movies = collectionsRepository.loadCollectionItems(collectionId)
     movies.mapIndexed { index, movie ->
@@ -51,7 +51,7 @@ class MovieDetailsCollectionMoviesCase @Inject constructor(
     }.awaitAll()
   }
 
-  private suspend fun loadTranslation(movie: Movie, language: String): Translation? {
+  private suspend fun loadTranslation(movie: Movie, language: Pair<String, String>): Translation? {
     if (language == DEFAULT_LANGUAGE) return null
     return translationsRepository.loadTranslation(
       movie = movie,

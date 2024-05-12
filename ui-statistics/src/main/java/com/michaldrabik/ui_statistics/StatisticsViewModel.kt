@@ -146,7 +146,7 @@ class StatisticsViewModel @Inject constructor(
       .toList()
       .filterNotNull()
 
-  private suspend fun loadTranslation(language: String, show: Show) =
+  private suspend fun loadTranslation(language: Pair<String, String>, show: Show) =
     if (language == Config.DEFAULT_LANGUAGE) null
     else translationsRepository.loadTranslation(show, language, true)
 

@@ -33,13 +33,15 @@ object Config {
   const val SEARCH_RECENTS_AMOUNT = 5
   const val FANART_GALLERY_IMAGES_LIMIT = 20
   const val PULL_TO_REFRESH_COOLDOWN_MS = 10_000
-  const val DEFAULT_LANGUAGE = "en"
+  const val DEFAULT_LANGUAGE_CODE = "en"
   const val DEFAULT_COUNTRY = "us"
   const val DEFAULT_DATE_FORMAT = "DEFAULT_24"
   const val DEFAULT_LIST_VIEW_MODE = "LIST_NORMAL"
   const val DEFAULT_LISTS_GRID_SPAN = 2
   const val HOST_ACTIVITY_NAME = "com.michaldrabik.showly2.ui.main.MainActivity"
 
+  val DEFAULT_LANGUAGE by lazy { Pair(DEFAULT_LANGUAGE_CODE, DEFAULT_COUNTRY)}
+  
   const val SHOW_TIPS = false
   const val SHOW_WHATS_NEW = true
 

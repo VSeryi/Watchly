@@ -92,7 +92,7 @@ class MainViewModel @Inject constructor(
   private fun checkApi13Locale(isInitialRun: Boolean) {
     if (!isInitialRun && !settingsRepository.isLocaleInitialised) {
       settingsRepository.isLocaleInitialised = true
-      val locale = LocaleListCompat.forLanguageTags(settingsRepository.language)
+      val locale = LocaleListCompat.forLanguageTags(settingsRepository.languageCode)
       AppCompatDelegate.setApplicationLocales(locale)
     }
   }

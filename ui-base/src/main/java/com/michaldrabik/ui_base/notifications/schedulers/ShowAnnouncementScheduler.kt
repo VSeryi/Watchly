@@ -46,7 +46,7 @@ class ShowAnnouncementScheduler @Inject constructor(
     episodeSeasonNumber: Int,
     episodeDate: ZonedDateTime,
     delay: NotificationDelay,
-    language: String,
+    language: Pair<String, String>
   ) {
     val show = mappers.show.fromDatabase(showDb)
 

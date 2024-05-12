@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.michaldrabik.common.Config.DEFAULT_COUNTRY
 import com.michaldrabik.common.Config.DEFAULT_DATE_FORMAT
-import com.michaldrabik.common.Config.DEFAULT_LANGUAGE
+import com.michaldrabik.common.Config.DEFAULT_LANGUAGE_CODE
 import com.michaldrabik.common.Mode
 import com.michaldrabik.common.dispatchers.CoroutineDispatchers
 import com.michaldrabik.data_local.LocalDataSource
@@ -42,8 +42,8 @@ class SettingsRepository @Inject constructor(
 ) {
 
   companion object Key {
-    const val LANGUAGE = "KEY_LANGUAGE"
-    private const val COUNTRY = "KEY_COUNTRY"
+    const val LANGUAGE_CODE = "KEY_LANGUAGE_CODE"
+    const val COUNTRY = "KEY_COUNTRY"
     private const val DATE_FORMAT = "KEY_DATE_FORMAT"
     private const val MODE = "KEY_MOVIES_MODE"
     private const val MOVIES_ENABLED = "KEY_MOVIES_ENABLED"
@@ -85,7 +85,7 @@ class SettingsRepository @Inject constructor(
   var streamingsEnabled by BooleanPreference(preferences, STREAMINGS_ENABLED, true)
   var isMoviesEnabled by BooleanPreference(preferences, MOVIES_ENABLED, true)
   var isTwitterAdEnabled by BooleanPreference(preferences, TWITTER_AD_ENABLED, true)
-  var language by StringPreference(preferences, LANGUAGE, DEFAULT_LANGUAGE)
+  var languageCode by StringPreference(preferences, LANGUAGE_CODE, DEFAULT_LANGUAGE_CODE)
   var country by StringPreference(preferences, COUNTRY, DEFAULT_COUNTRY)
   var dateFormat by StringPreference(preferences, DATE_FORMAT, DEFAULT_DATE_FORMAT)
 
@@ -95,6 +95,8 @@ class SettingsRepository @Inject constructor(
   var progressNextEpisodeType by EnumPreference(preferences, PROGRESS_NEXT_EPISODE_TYPE, LAST_WATCHED, ProgressNextEpisodeType::class.java)
   var progressDateSelectionType by EnumPreference(preferences, PROGRESS_DATE_SELECTION_TYPE, ALWAYS_ASK, ProgressDateSelectionType::class.java)
   var isLocaleInitialised by BooleanPreference(preferences, LOCALE_INITIALISED, false)
+
+  var language: Pair<String, String> = Pair(languageCode, country)
 
   var mode: Mode
     get() {
@@ -129,7 +131,7 @@ class SettingsRepository @Inject constructor(
     }
   }
 
-  suspend fun clearUnusedTranslations(input: List<String>) {
+  suspend fun clearUnusedTranslationsByLanguage(input: List<String>) {
     with(localSource) {
       transactions.withTransaction {
         showTranslations.deleteByLanguage(input)
@@ -138,6 +140,17 @@ class SettingsRepository @Inject constructor(
         people.deleteTranslations()
         movieImages.deleteAll()
         showImages.deleteAll()
+      }
+    }
+  }
+
+  suspend fun clearUnusedTranslationsByCountry(input: List<String>) {
+    with(localSource) {
+      transactions.withTransaction {
+        showTranslations.deleteByCountry(input)
+        movieTranslations.deleteByCountry(input)
+        episodesTranslations.deleteByCountry(input)
+        people.deleteTranslations()
       }
     }
   }
