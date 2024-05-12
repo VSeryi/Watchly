@@ -3,6 +3,8 @@ package com.michaldrabik.repository.images
 import com.michaldrabik.common.dispatchers.CoroutineDispatchers
 import com.michaldrabik.data_local.LocalDataSource
 import com.michaldrabik.data_remote.RemoteDataSource
+import com.michaldrabik.data_remote.tmdb.model.TmdbImage
+import com.michaldrabik.repository.TranslationsRepository
 import com.michaldrabik.repository.mappers.Mappers
 import com.michaldrabik.ui_model.Episode
 import com.michaldrabik.ui_model.IdTmdb
@@ -14,7 +16,6 @@ import com.michaldrabik.ui_model.ImageStatus.UNAVAILABLE
 import com.michaldrabik.ui_model.ImageType
 import com.michaldrabik.ui_model.ImageType.FANART
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,44 +24,33 @@ class EpisodeImagesProvider @Inject constructor(
   private val dispatchers: CoroutineDispatchers,
   private val remoteSource: RemoteDataSource,
   private val localSource: LocalDataSource,
-  private val mappers: Mappers
+  private val mappers: Mappers,
+  private var translationsRepository: TranslationsRepository
 ) {
 
   suspend fun loadRemoteImage(showId: IdTmdb, episode: Episode): Image = withContext(dispatchers.IO) {
-    val tvdbId = episode.ids.tvdb
-    val tmdbId = episode.ids.tmdb
-    val cachedImage = findCachedImage(episode, FANART)
+    val tmdbId = episode.ids.tmdb.id
+
+    val type = FANART
+    val cachedImage = findCachedImage(episode, type)
     if (cachedImage.status == AVAILABLE) {
       return@withContext cachedImage
     }
 
-    var image = Image.createUnavailable(FANART)
-    try {
-      var remoteImage = remoteSource.tmdb.fetchEpisodeImage(showId.id, episode.season, episode.number)
-      if (remoteImage == null && (episode.numberAbs ?: 0) > 0) {
-        // Try absolute episode number if present (may happen with certain Anime series)
-        remoteImage = remoteSource.tmdb.fetchEpisodeImage(showId.id, episode.season, episode.numberAbs)
-      }
-      image = when (remoteImage) {
-        null -> Image.createUnavailable(FANART)
-        else -> Image(
-          id = -1,
-          idTvdb = tvdbId,
-          idTmdb = tmdbId,
-          type = FANART,
-          family = EPISODE,
-          fileUrl = remoteImage.file_path,
-          thumbnailUrl = "",
-          status = AVAILABLE,
-          source = ImageSource.TMDB
-        )
-      }
-    } catch (error: Throwable) {
-      Timber.w(error)
+    val typeImages = (remoteSource.tmdb.fetchEpisodeImage(showId.id, episode.season, episode.number).stills
+      // Try absolute episode number if present (may happen with certain Anime series)
+      ?: (episode.numberAbs?.let { remoteSource.tmdb.fetchEpisodeImage(showId.id, episode.season, it).stills }
+      ?: emptyList()))
+
+    val remoteImage = findBestImage(typeImages, type)
+
+    val image = when (remoteImage) {
+      null -> Image.createUnavailable(FANART)
+      else -> Image.createAvailable(episode.ids, type, EPISODE, remoteImage.file_path, ImageSource.TMDB)
     }
 
     when (image.status) {
-      UNAVAILABLE -> localSource.showImages.deleteByEpisodeId(tmdbId.id, image.type.key)
+      UNAVAILABLE -> localSource.showImages.deleteByEpisodeId(tmdbId, image.type.key)
       else -> localSource.showImages.insertEpisodeImage(mappers.image.toDatabaseShow(image))
     }
 
@@ -73,5 +63,18 @@ class EpisodeImagesProvider @Inject constructor(
       null -> Image.createUnknown(type, EPISODE)
       else -> mappers.image.fromDatabase(cachedImage).copy(type = type)
     }
+  }
+
+  private fun findBestImage(images: List<TmdbImage>, type: ImageType): TmdbImage? {
+    val language = translationsRepository.getLanguageCode()
+    val comparator = when (type) {
+      ImageType.POSTER -> compareBy<TmdbImage> { it.isLanguage(language) }
+        .thenBy { it.isEnglish() }
+        .thenBy { it.isPlain() }
+      else -> compareBy<TmdbImage> { it.isPlain() }
+        .thenBy { it.isLanguage(language) }
+        .thenBy { it.isEnglish() }
+    }
+    return images.maxWithOrNull(comparator.thenBy { it.getVoteScore() })
   }
 }

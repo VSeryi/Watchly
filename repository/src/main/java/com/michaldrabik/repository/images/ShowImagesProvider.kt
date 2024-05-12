@@ -102,7 +102,7 @@ class ShowImagesProvider @Inject constructor(
             val episode = seasons[0].episodes?.firstOrNull()
             episode?.let { ep ->
               runCatching {
-                val backupImage = remoteSource.tmdb.fetchEpisodeImage(tmdbId.id, ep.season, ep.number)
+                val backupImage = remoteSource.tmdb.fetchEpisodeImage(tmdbId.id, ep.season, ep.number).stills?.firstOrNull()
                 backupImage?.let {
                   typeImages = listOf(TmdbImage(it.file_path, 0F, 0, "en"))
                 }

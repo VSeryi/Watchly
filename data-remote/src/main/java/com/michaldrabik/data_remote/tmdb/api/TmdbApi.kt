@@ -21,10 +21,9 @@ internal class TmdbApi(private val service: TmdbService) : TmdbRemoteDataSource 
       if (showTmdbId == null || showTmdbId <= 0) TmdbImages.EMPTY
       if (season == null || season <= 0) TmdbImages.EMPTY
       if (episode == null || episode <= 0) TmdbImages.EMPTY
-      val images = service.fetchEpisodeImages(showTmdbId, season, episode)
-      images.stills?.firstOrNull()
+      service.fetchEpisodeImages(showTmdbId, season, episode)
     } catch (error: Throwable) {
-      null
+      TmdbImages.EMPTY
     }
 
   override suspend fun fetchMovieImages(tmdbId: Long) =

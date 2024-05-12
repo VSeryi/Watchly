@@ -13,7 +13,7 @@ interface TmdbRemoteDataSource {
 
   suspend fun fetchShowImages(tmdbId: Long): TmdbImages
 
-  suspend fun fetchEpisodeImage(showTmdbId: Long?, season: Int?, episode: Int?): TmdbImage?
+  suspend fun fetchEpisodeImage(showTmdbId: Long?, season: Int?, episode: Int?): TmdbImages
 
   suspend fun fetchMovieImages(tmdbId: Long): TmdbImages
 
