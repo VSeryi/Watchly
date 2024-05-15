@@ -13,9 +13,12 @@ import com.michaldrabik.ui_base.utilities.extensions.combine
 import com.michaldrabik.ui_model.ProgressDateSelectionType
 import com.michaldrabik.ui_model.ProgressNextEpisodeType
 import com.michaldrabik.ui_model.Settings
+import com.michaldrabik.ui_settings.helpers.AppColors
 import com.michaldrabik.ui_settings.helpers.AppLanguage
+import com.michaldrabik.ui_settings.helpers.AppTheme
 import com.michaldrabik.ui_settings.sections.general.cases.SettingsGeneralMainCase
 import com.michaldrabik.ui_settings.sections.general.cases.SettingsGeneralStreamingsCase
+import com.michaldrabik.ui_settings.sections.general.cases.SettingsGeneralThemesCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,11 +30,14 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsGeneralViewModel @Inject constructor(
   private val mainCase: SettingsGeneralMainCase,
+  private val themesCase: SettingsGeneralThemesCase,
   private val streamingsCase: SettingsGeneralStreamingsCase,
 ) : ViewModel() {
 
   private val settingsState = MutableStateFlow<Settings?>(null)
   private val languageState = MutableStateFlow(AppLanguage.ENGLISH)
+  private val themeState = MutableStateFlow(AppTheme.DARK)
+  private val colorsState = MutableStateFlow(AppColors.STATIC)
   private val countryState = MutableStateFlow<AppCountry?>(null)
   private val dateFormatState = MutableStateFlow<AppDateFormat?>(null)
   private val moviesEnabledState = MutableStateFlow(true)
@@ -52,6 +58,8 @@ class SettingsGeneralViewModel @Inject constructor(
   private suspend fun refreshSettings(restartApp: Boolean = false) {
     settingsState.value = mainCase.getSettings()
     languageState.value = mainCase.getLanguage()
+    themeState.value = themesCase.getTheme()
+    colorsState.value = themesCase.getColors()
     countryState.value = mainCase.getCountry()
     dateFormatState.value = mainCase.getDateFormat()
     moviesEnabledState.value = mainCase.isMoviesEnabled()
@@ -97,6 +105,21 @@ class SettingsGeneralViewModel @Inject constructor(
       mainCase.setLanguage(language)
       val locales = LocaleListCompat.forLanguageTags(language.code)
       AppCompatDelegate.setApplicationLocales(locales)
+    }
+  }
+
+  fun setTheme(theme: AppTheme) {
+    viewModelScope.launch {
+      themesCase.setTheme(theme)
+      refreshSettings()
+    }
+  }
+
+  fun setColors(colors: AppColors) {
+    viewModelScope.launch {
+      themesCase.setColors(colors)
+      delay(300)
+      refreshSettings(restartApp = true)
     }
   }
 
@@ -147,6 +170,8 @@ class SettingsGeneralViewModel @Inject constructor(
     settingsState,
     premiumState,
     languageState,
+    themeState,
+    colorsState,
     countryState,
     dateFormatState,
     moviesEnabledState,
@@ -156,20 +181,22 @@ class SettingsGeneralViewModel @Inject constructor(
     progressUpcomingDaysState,
     tabletsColumnsState,
     progressDateSelectionState
-  ) { s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12 ->
+  ) { s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14 ->
     SettingsGeneralUiState(
       settings = s1,
       isPremium = s2,
       language = s3,
-      country = s4,
-      dateFormat = s5,
-      moviesEnabled = s6,
-      streamingsEnabled = s7,
-      progressNextType = s8,
-      restartApp = s9,
-      progressUpcomingDays = s10,
-      tabletColumns = s11,
-      progressDateSelectionType = s12
+      theme = s4,
+      colors = s5,
+      country = s6,
+      dateFormat = s7,
+      moviesEnabled = s8,
+      streamingsEnabled = s9,
+      progressNextType = s10,
+      restartApp = s11,
+      progressUpcomingDays = s12,
+      tabletColumns = s13,
+      progressDateSelectionType = s14
     )
   }.stateIn(
     scope = viewModelScope,

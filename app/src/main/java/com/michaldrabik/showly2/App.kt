@@ -4,8 +4,10 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.os.Build
 import android.os.StrictMode
+import androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import com.google.android.material.color.DynamicColors
 import com.jakewharton.processphoenix.ProcessPhoenix
 import com.michaldrabik.repository.settings.SettingsRepository
 import com.michaldrabik.ui_base.common.AppScopeProvider
@@ -89,6 +91,16 @@ class App :
       }
     }
 
+    fun setupTheme() {
+      setDefaultNightMode(settingsRepository.theme)
+    }
+
+    fun setupColors() {
+      if (settingsRepository.colors != 0 ) {
+        DynamicColors.applyToActivitiesIfAvailable(this)
+      }
+    }
+
     super.onCreate()
 
     if (ProcessPhoenix.isPhoenixProcess(this)) return
@@ -100,6 +112,8 @@ class App :
     setupSettings()
     setupStrictMode()
     setupNotificationChannels()
+    setupTheme()
+    setupColors()
   }
 
   override fun requestShowsWidgetsUpdate() {

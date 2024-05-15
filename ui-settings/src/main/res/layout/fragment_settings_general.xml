@@ -115,7 +115,7 @@
     android:id="@+id/settingsTheme"
     style="@style/Settings.ItemLayout"
     android:tag="@string/tagTheme"
-    app:layout_constraintBottom_toTopOf="@+id/settingsDateFormat"
+    app:layout_constraintBottom_toTopOf="@+id/settingsColors"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/settingsCountry"
@@ -160,13 +160,61 @@
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/settingsColors"
+      style="@style/Settings.ItemLayout"
+      android:tag="@string/tagColors"
+      app:layout_constraintBottom_toTopOf="@+id/settingsDateFormat"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/settingsTheme"
+      >
+
+    <TextView
+        android:id="@+id/settingsColorsTitle"
+        style="@style/Settings.Title"
+        android:drawablePadding="@dimen/spaceSmall"
+        android:text="@string/textSettingsColorsTitle"
+        app:drawableTint="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toTopOf="@id/settingsColorsDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        />
+
+    <TextView
+        android:id="@+id/settingsColorsDescription"
+        style="@style/Settings.Summary"
+        android:layout_marginEnd="@dimen/spaceNormal"
+        android:text="@string/textSettingsColorsSummary"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/settingsColorsValue"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/settingsColorsTitle"
+        />
+
+    <TextView
+        android:id="@+id/settingsColorsValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="?attr/colorAccent"
+        app:layout_constraintBottom_toBottomOf="@id/settingsColors"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/settingsColors"
+        tools:text="@tools:sample/lorem"
+        />
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
   <LinearLayout
     android:id="@+id/settingsDateFormat"
     style="@style/Settings.ItemLayout"
     app:layout_constraintBottom_toTopOf="@id/settingsTabletColumns"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/settingsTheme"
+    app:layout_constraintTop_toBottomOf="@id/settingsColors"
     >
 
     <TextView

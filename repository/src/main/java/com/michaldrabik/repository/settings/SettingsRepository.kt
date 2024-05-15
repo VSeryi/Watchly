@@ -1,6 +1,7 @@
 package com.michaldrabik.repository.settings
 
 import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import com.michaldrabik.common.Config.DEFAULT_COUNTRY
 import com.michaldrabik.common.Config.DEFAULT_DATE_FORMAT
@@ -50,6 +51,8 @@ class SettingsRepository @Inject constructor(
     private const val TWITTER_AD_ENABLED = "TWITTER_AD_ENABLED"
     private const val PROGRESS_PERCENT = "KEY_PROGRESS_PERCENT"
     private const val STREAMINGS_ENABLED = "KEY_STREAMINGS_ENABLED"
+    private const val THEME = "KEY_THEME"
+    private const val COLORS = "KEY_COLORS"
     private const val USER_ID = "KEY_USER_ID"
     private const val INSTALL_TIMESTAMP = "INSTALL_TIMESTAMP"
     private const val PROGRESS_UPCOMING_COLLAPSED = "PROGRESS_UPCOMING_COLLAPSED"
@@ -104,6 +107,18 @@ class SettingsRepository @Inject constructor(
       return Mode.valueOf(preferences.getString(MODE, default) ?: default)
     }
     set(value) = preferences.edit(true) { putString(MODE, value.name) }
+
+  var theme: Int
+    get() {
+      return preferences.getInt(THEME, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+    }
+    set(value) = preferences.edit(true) { putInt(THEME, value) }
+
+  var colors: Int
+    get() {
+      return preferences.getInt(COLORS, 0)
+    }
+    set(value) = preferences.edit(true) { putInt(COLORS, value) }
 
   var progressPercentType: ProgressType
     get() {

@@ -2,6 +2,7 @@ package com.michaldrabik.ui_settings.sections.general
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -29,6 +30,7 @@ import com.michaldrabik.ui_model.Settings
 import com.michaldrabik.ui_navigation.java.NavigationArgs.ARG_ITEM
 import com.michaldrabik.ui_settings.R
 import com.michaldrabik.ui_settings.databinding.FragmentSettingsGeneralBinding
+import com.michaldrabik.ui_settings.helpers.AppColors
 import com.michaldrabik.ui_settings.helpers.AppLanguage
 import com.michaldrabik.ui_settings.helpers.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -75,6 +77,7 @@ class SettingsGeneralFragment : BaseFragment<SettingsGeneralViewModel>(R.layout.
         renderSettings(settings)
         renderLanguage(language)
         renderTheme(theme)
+        renderColors(colors)
         renderCountry(country)
         renderProgressType(progressNextType)
         renderDateSelection(progressDateSelectionType)
@@ -111,6 +114,15 @@ class SettingsGeneralFragment : BaseFragment<SettingsGeneralViewModel>(R.layout.
       settingsThemeValue.setText(theme.displayName)
       settingsTheme.onClick {
         onPremiumAction(tag)
+      }
+    }
+  }
+
+  private fun renderColors(colors: AppColors) {
+    with(binding) {
+      settingsColorsValue.setText(colors.displayName)
+      settingsColors.onClick {
+        showColorsDialog(colors)
       }
     }
   }
@@ -219,6 +231,35 @@ class SettingsGeneralFragment : BaseFragment<SettingsGeneralViewModel>(R.layout.
       ) { dialog, index ->
         if (index != selected) {
           viewModel.setProgressUpcomingDays(options[index].toLong())
+        }
+        dialog.dismiss()
+      }
+      .show()
+  }
+
+  private fun showThemeDialog(theme: AppTheme) {
+    val options = AppTheme.values()
+    val selected = options.indexOf(theme)
+    MaterialAlertDialogBuilder(requireContext(), R.style.AlertDialog)
+      .setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.bg_dialog))
+      .setSingleChoiceItems(options.map { getString(it.displayName) }.toTypedArray(), selected) { dialog, index ->
+        if (index != selected) {
+          viewModel.setTheme(options[index])
+          AppCompatDelegate.setDefaultNightMode(options[index].code)
+        }
+        dialog.dismiss()
+      }
+      .show()
+  }
+
+  private fun showColorsDialog(colors: AppColors) {
+    val options = AppColors.values()
+    val selected = options.indexOf(colors)
+    MaterialAlertDialogBuilder(requireContext(), R.style.AlertDialog)
+      .setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.bg_dialog))
+      .setSingleChoiceItems(options.map { getString(it.displayName) }.toTypedArray(), selected) { dialog, index ->
+        if (index != selected) {
+          viewModel.setColors(options[index])
         }
         dialog.dismiss()
       }

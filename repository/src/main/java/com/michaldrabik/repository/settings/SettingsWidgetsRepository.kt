@@ -1,7 +1,7 @@
 package com.michaldrabik.repository.settings
 
-import android.app.UiModeManager
 import android.content.SharedPreferences
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
 import com.michaldrabik.common.Mode
 import com.michaldrabik.ui_model.CalendarMode
@@ -24,7 +24,7 @@ class SettingsWidgetsRepository @Inject constructor(
 
   var widgetsTheme: Int
     get() {
-      return UiModeManager.MODE_NIGHT_YES
+      return AppCompatDelegate.MODE_NIGHT_YES
     }
     set(value) = preferences.edit(true) { putInt(THEME_WIDGET, value) }
 
@@ -53,7 +53,7 @@ class SettingsWidgetsRepository @Inject constructor(
   }
 
   fun revokePremium() {
-    widgetsTheme = UiModeManager.MODE_NIGHT_YES
+    widgetsTheme = AppCompatDelegate.MODE_NIGHT_YES
     widgetsTransparency = 100
   }
 }

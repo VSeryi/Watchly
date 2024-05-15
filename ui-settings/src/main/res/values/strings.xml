@@ -138,4 +138,10 @@
   <string name="textTransparency50" translatable="false">50%</string>
   <string name="textTransparency75" translatable="false">75%</string>
   <string name="textTransparency100">Opaque</string>
+
+  <string name="textColorsStatic">Static</string>
+  <string name="textColorsDynamic">Dynamic</string>
+    <string name="textSettingsColorsTitle">Colors</string>
+  <string name="textSettingsColorsSummary">Select theme colors.</string>
+    <string name="tagColors">Colors</string>
 </resources>

@@ -6,13 +6,12 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import com.michaldrabik.ui_settings.R
 
-enum class AppTheme(
+enum class AppColors(
   val code: Int,
   @StringRes val displayName: Int
 ) {
-  SYSTEM(MODE_NIGHT_FOLLOW_SYSTEM, R.string.textThemeSystem),
-  DARK(MODE_NIGHT_YES, R.string.textThemeDark),
-  LIGHT(MODE_NIGHT_NO, R.string.textThemeLight);
+  STATIC(0, R.string.textColorsStatic),
+  DYNAMIC(1, R.string.textColorsDynamic);
 
   companion object {
     fun fromCode(code: Int) = values().first { it.code == code }
